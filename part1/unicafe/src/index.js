@@ -3,20 +3,22 @@ import ReactDOM from 'react-dom'
 
 const Statistic = ({text, value}) => {
   return (
-    <p>{text}: {value}</p>
+    <tr><td>{text}</td><td>{value}</td></tr>
   )
 }
 
 const Statistics = ({good, neutral, bad, all, average}) => {
   return (
-    <>
-      <Statistic text="Good" value={good} />
-      <Statistic text="Neutral" value={neutral} />
-      <Statistic text="Bad" value={bad} />
-      <Statistic text="All" value={all} />
-      <Statistic text="Average" value={all > 0 ? average / all : 0} />
-      <Statistic text="Positive" value={(all > 0 ? (good * 100 / all) : 0) + '%'} />
-    </>
+    <table>
+      <tbody>
+        <Statistic text="Good" value={good} />
+        <Statistic text="Neutral" value={neutral} />
+        <Statistic text="Bad" value={bad} />
+        <Statistic text="All" value={all} />
+        <Statistic text="Average" value={all > 0 ? average / all : 0} />
+        <Statistic text="Positive" value={(all > 0 ? (good * 100 / all) : 0) + '%'} />
+      </tbody>
+    </table>
   )
 }
 
@@ -35,7 +37,6 @@ const App = () => {
   const [average, setAverage] = useState(0)
 
   const handleGoodClick = () => {
-    console.log('object');
     setAll(all + 1)
     setAverage(average + 1)
     setGood(good + 1)
