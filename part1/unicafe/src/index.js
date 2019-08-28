@@ -22,6 +22,7 @@ const App = () => {
   const [average, setAverage] = useState(0)
 
   const handleGoodClick = () => {
+    console.log('object');
     setAll(all + 1)
     setAverage(average + 1)
     setGood(good + 1)
@@ -46,12 +47,17 @@ const App = () => {
       <Button onClick={handleNeutralClick} text="neutral" />
       <Button onClick={handleBadClick} text="bad" />
       <h2>Statistics</h2>
-      <Statistics text="Good" statistics={good} />
-      <Statistics text="Neutral" statistics={neutral} />
-      <Statistics text="Bad" statistics={bad} />
-      <Statistics text="All" statistics={all} />
-      <Statistics text="Average" statistics={all > 0 ? average / all : 0} />
-      <Statistics text="Positive" statistics={(all > 0 ? (good * 100 / all) : 0) + '%'} />
+      {all > 0 ? 
+        <>
+          <Statistics text="Good" statistics={good} />
+          <Statistics text="Neutral" statistics={neutral} />
+          <Statistics text="Bad" statistics={bad} />
+          <Statistics text="All" statistics={all} />
+          <Statistics text="Average" statistics={all > 0 ? average / all : 0} />
+          <Statistics text="Positive" statistics={(all > 0 ? (good * 100 / all) : 0) + '%'} />
+        </>
+        : <p>No feedback given</p>}
+      
     </div>
   )
 }
