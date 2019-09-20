@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
@@ -12,11 +12,11 @@ const App = () => {
   const [ filteredPersons, setFilteredPersons ] = useState(persons)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-        setFilteredPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPeople => {
+        setPersons(initialPeople)
+        setFilteredPersons(initialPeople)
       })
       .catch(err => {
         console.log(err);  
@@ -44,11 +44,11 @@ const App = () => {
     } else {
       const personObject = {name: newName, number: newNumber}
 
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
-          setFilteredPersons(persons.concat(response.data))
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setFilteredPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
         })
