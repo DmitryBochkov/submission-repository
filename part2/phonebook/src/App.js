@@ -58,12 +58,15 @@ const App = () => {
 
   const deletePerson = id => {
     const newList = persons.filter(person => person.id !== id)
-    personService
-      .remove(id)
-      .then(() => {
-        setPersons(newList)
-        setFilteredPersons(newList)
-      })
+    const personName = persons.filter(person => person.id === id)[0].name
+    if (window.confirm(`Delete ${personName}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(newList)
+          setFilteredPersons(newList)
+        })
+    }
   }
 
   return (
