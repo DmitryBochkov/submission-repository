@@ -37,10 +37,27 @@ const App = () => {
 
   const addPerson = event => {
     event.preventDefault();
-    const found = persons.some(person => person.name === newName)
+    const found = persons.filter(person => person.name === newName)
 
-    if (found) {
-      alert(`${newName} is already added to phonebook`)
+    if (found.length) {
+      console.log(found[0].number, newNumber);
+      if (found[0].number.trim() !== newNumber.trim()) {
+        if (window.confirm(`${newName} is already added to phonebook. Replace the old number with the new one?`)) {
+          const updatedPersonObject = {name: newName, number: newNumber.trim()}
+          const foundId = found[0].id 
+
+          personService
+            .update(foundId, updatedPersonObject)
+            .then(returnedPerson => {
+              setPersons(persons.map(person => person.id === foundId ? returnedPerson : person))
+              setFilteredPersons(persons.map(person => person.id === foundId ? returnedPerson : person))
+              setNewName('')
+              setNewNumber('')
+            })
+        }
+      } else {
+        alert(`${newName} is already added to phonebook`)        
+      }
     } else {
       const personObject = {name: newName, number: newNumber}
 
