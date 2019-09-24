@@ -12,6 +12,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filteredPersons, setFilteredPersons ] = useState(persons)
   const [ message, setMessage ] = useState(null)
+  const [ messageStatus, setMessagetatus ] = useState('success')
 
   useEffect(() => {
     personService
@@ -88,16 +89,27 @@ const App = () => {
           setPersons(newList)
           setFilteredPersons(newList)
         })
+        .catch(() => {
+          messageSetter(`Information of ${personName} has already been removed from the server.`, 5000, 'error')
+          setPersons(newList)
+          setFilteredPersons(newList)
+        })
     }
   }
 
-  const messageSetter = (msg, delay) => {
+  const messageSetter = (msg, delay, status) => {
     if (!delay) {
       delay = 5000;
+    }
+    if (status === 'error') {
+      setMessagetatus(status)
+    } else {
+      setMessagetatus('success')
     }
     setMessage(msg);
     setTimeout(() => {
       setMessage(null);
+      setMessagetatus('success')
     }, delay);
   }
 
@@ -105,7 +117,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
-      <Notification message={message} />
+      <Notification message={message} status={messageStatus} />
 
       <Filter handleNameFilter={handleNameFilter} />
 

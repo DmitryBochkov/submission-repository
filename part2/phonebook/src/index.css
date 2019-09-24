@@ -1,8 +1,16 @@
 .notification {
   background-color: #ccc;
-  border: 2px solid green;
+  border: 2px solid #ccc;
   padding: 5px 10px;
   font-size: 16px;
-  color: green;
+  color: black;
   font-weight: bold;
+}
+.notification.success {
+  border: 2px solid green;
+  color: green;
+}
+.notification.error {
+  border: 2px solid red;
+  color: red;
 }
