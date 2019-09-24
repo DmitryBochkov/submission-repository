@@ -4,12 +4,14 @@ import personService from './services/persons'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filteredPersons, setFilteredPersons ] = useState(persons)
+  const [ message, setMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -37,7 +39,7 @@ const App = () => {
 
   const addPerson = event => {
     event.preventDefault();
-    const found = persons.filter(person => person.name === newName)
+    const found = persons.filter(person => person.name === newName.trim())
 
     if (found.length) {
       console.log(found[0].number, newNumber);
@@ -51,6 +53,7 @@ const App = () => {
             .then(returnedPerson => {
               setPersons(persons.map(person => person.id === foundId ? returnedPerson : person))
               setFilteredPersons(persons.map(person => person.id === foundId ? returnedPerson : person))
+              messageSetter(`${newName} was successfully updated.`)
               setNewName('')
               setNewNumber('')
             })
@@ -66,6 +69,7 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setFilteredPersons(persons.concat(returnedPerson))
+          messageSetter(`${newName} was successfully added.`)
           setNewName('')
           setNewNumber('')
         })
@@ -80,15 +84,28 @@ const App = () => {
       personService
         .remove(id)
         .then(() => {
+          messageSetter(`${personName} was successfully deleted.`)
           setPersons(newList)
           setFilteredPersons(newList)
         })
     }
   }
 
+  const messageSetter = (msg, delay) => {
+    if (!delay) {
+      delay = 5000;
+    }
+    setMessage(msg);
+    setTimeout(() => {
+      setMessage(null);
+    }, delay);
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+
+      <Notification message={message} />
 
       <Filter handleNameFilter={handleNameFilter} />
 
